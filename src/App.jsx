@@ -629,13 +629,6 @@ function App() {
     }
   }, []); // stable — reads live translation via tRef
 
-  // Fetch tickets when Report tab is active
-  // fetchTickets is stable (empty dep array) so this effect is safe
-  useEffect(() => {
-    if (activeTab === 'report') {
-      fetchTickets();
-    }
-  }, [activeTab, fetchTickets]);
 
   // ─────────────────────────────────────────────
   // GEO BUTTON LABEL
@@ -648,6 +641,14 @@ function App() {
     if (geoStatus === 'denied') return '❌ ' + t.locationDenied;
     return t.useLocation;
   };
+
+  // Fetch tickets when Report tab is active
+  // fetchTickets is stable (empty dep array) so this effect is safe
+  useEffect(() => {
+    if (activeTab === 'report') {
+      fetchTickets();
+    }
+  }, [activeTab, fetchTickets]);
 
   // ─────────────────────────────────────────────
   // RENDER
