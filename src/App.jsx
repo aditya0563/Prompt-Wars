@@ -397,7 +397,7 @@ function App() {
   const [chatNetworkError, setChatNetworkError] = useState(null);
   // Firestore fetch error shown as an inline banner in the tickets list
   const [ticketsFetchError, setTicketsFetchError] = useState(null);
-  const chatEndRef = useRef(null);
+  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   // ── Persistent single chat session ref.
@@ -421,7 +421,7 @@ function App() {
 
   // Auto-scroll chat
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
 
@@ -697,7 +697,7 @@ function App() {
       <main className="flex-1 flex flex-col min-w-0 bg-transparent">
         {/* ══════════════ AI COMPANION TAB ══════════════ */}
         {activeTab === 'companion' && (
-          <div className="flex-1 flex flex-col max-w-4xl w-full mx-auto p-4 md:p-6 lg:p-8">
+          <div className="flex flex-col h-full overflow-hidden max-w-4xl w-full mx-auto p-4 md:p-6 lg:p-8">
             <header className="flex items-center justify-between pb-4 border-b border-slate-700/50">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xl shadow-lg">🤖</div>
@@ -765,7 +765,7 @@ function App() {
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-6 scroll-smooth" id="chat-messages">
+            <div className="flex-1 overflow-y-auto p-4 scroll-smooth flex flex-col gap-4" id="chat-messages">
               {renderedMessages.map((msg, index) => (
                 <div
                   key={index}
@@ -799,7 +799,7 @@ function App() {
                   </div>
                 </div>
               )}
-              <div ref={chatEndRef} />
+              <div ref={messagesEndRef}></div>
             </div>
 
             <div className="mt-4 bg-slate-800/50 backdrop-blur-xl border border-slate-700 p-2 rounded-2xl flex items-center shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
