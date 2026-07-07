@@ -424,13 +424,6 @@ function App() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Fetch tickets when Report tab is active
-  // fetchTickets is stable (empty dep array) so this effect is safe
-  useEffect(() => {
-    if (activeTab === 'report') {
-      fetchTickets();
-    }
-  }, [activeTab, fetchTickets]);
 
   // Rebuild the persistent chat session when language or jargon mode changes.
   // History is re-seeded so multi-turn context is fully preserved.
@@ -635,6 +628,14 @@ function App() {
       setTicketsLoading(false);
     }
   }, []); // stable — reads live translation via tRef
+
+  // Fetch tickets when Report tab is active
+  // fetchTickets is stable (empty dep array) so this effect is safe
+  useEffect(() => {
+    if (activeTab === 'report') {
+      fetchTickets();
+    }
+  }, [activeTab, fetchTickets]);
 
   // ─────────────────────────────────────────────
   // GEO BUTTON LABEL
