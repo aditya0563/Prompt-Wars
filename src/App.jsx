@@ -9,7 +9,7 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import './global.css';
+import './index.css';
 
 // ─────────────────────────────────────────────
 // GLOBAL AI CLIENT — instantiated once, outside component
@@ -450,6 +450,7 @@ function App() {
       },
       history,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLangCode, jargonMode]);
   // NOTE: `messages` is intentionally NOT a dependency here. We only want to
   // rebuild the session when language or jargon settings change — not on every
@@ -655,89 +656,77 @@ function App() {
   // ─────────────────────────────────────────────
 
   return (
-    <div style={styles.appShell} className="app-shell">
+    <div className="flex h-screen bg-transparent font-sans">
       {/* ─── Sidebar ─── */}
-      <aside style={styles.sidebar} className="sidebar">
-        <div style={styles.brandSection} className="brand-section">
-          <div style={styles.logoIcon} className="logo-icon">🏛️</div>
-          <div className="brand-title-container">
-            <h1 style={styles.brandTitle}>{t.brandTitle}</h1>
-            <p style={styles.brandSub}>{t.brandSub}</p>
+      <aside className="w-[260px] min-w-[260px] bg-slate-900/60 backdrop-blur-xl flex flex-col p-6 shadow-[4px_0_24px_rgba(0,0,0,0.2)] z-10">
+        <div className="flex flex-col mb-8 pb-6 border-b border-slate-700/50 text-center items-center">
+          <div className="text-4xl mb-3 drop-shadow-[0_0_12px_rgba(14,165,233,0.4)]">🏛️</div>
+          <div className="flex flex-col">
+            <h1 className="text-[22px] font-bold text-slate-100 tracking-tight">{t.brandTitle}</h1>
+            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mt-1">{t.brandSub}</p>
           </div>
         </div>
-        <nav style={styles.nav} className="nav">
+        <nav className="flex flex-col gap-2 flex-1">
           <button
             id="tab-companion"
-            className="nav-btn interactive-btn"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 interactive-btn ${activeTab === 'companion' ? 'bg-sky-500/10 text-sky-400 shadow-[inset_0_0_0_1px_rgba(14,165,233,0.3)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`}
             onClick={() => setActiveTab('companion')}
-            style={{
-              ...styles.navBtn,
-              ...(activeTab === 'companion' ? styles.navBtnActive : {}),
-            }}
           >
-            <span style={styles.navIcon}>🤖</span>
+            <span className="text-lg opacity-80">🤖</span>
             {t.navCompanion}
           </button>
           <button
             id="tab-report"
-            className="nav-btn interactive-btn"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 interactive-btn ${activeTab === 'report' ? 'bg-sky-500/10 text-sky-400 shadow-[inset_0_0_0_1px_rgba(14,165,233,0.3)]' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`}
             onClick={() => setActiveTab('report')}
-            style={{
-              ...styles.navBtn,
-              ...(activeTab === 'report' ? styles.navBtnActive : {}),
-            }}
           >
-            <span style={styles.navIcon}>📋</span>
+            <span className="text-lg opacity-80">📋</span>
             {t.navReport}
             {tickets.length > 0 && (
-              <span style={styles.ticketBadge}>{tickets.length}</span>
+              <span className="ml-auto bg-sky-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(14,165,233,0.6)]">{tickets.length}</span>
             )}
           </button>
         </nav>
-        <div style={styles.sidebarFooter} className="sidebar-footer">
-          <span style={styles.footerDot} />
+        <div className="mt-auto text-xs text-slate-500 flex items-center justify-center gap-2 pt-4 opacity-70">
+          <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
           {t.poweredBy}
         </div>
       </aside>
 
       {/* ─── Main Content ─── */}
-      <main style={styles.mainContent}>
+      <main className="flex-1 flex flex-col min-w-0 bg-transparent">
         {/* ══════════════ AI COMPANION TAB ══════════════ */}
         {activeTab === 'companion' && (
-          <div style={styles.chatContainer}>
-            <header style={styles.chatHeader} className="chat-header">
-              <div style={styles.chatHeaderLeft}>
-                <div style={styles.aiAvatar}>🤖</div>
+          <div className="flex-1 flex flex-col max-w-4xl w-full mx-auto p-4 md:p-6 lg:p-8">
+            <header className="flex items-center justify-between pb-4 border-b border-slate-700/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xl shadow-lg">🤖</div>
                 <div>
-                  <h2 style={styles.chatTitle}>{t.chatTitle}</h2>
-                  <p style={styles.chatSubtitle}>
+                  <h2 className="text-lg font-bold text-slate-100 tracking-tight">{t.chatTitle}</h2>
+                  <p className="text-xs text-sky-400 font-medium">
                     {isLoading ? t.typingStatus : t.onlineStatus}
                   </p>
                 </div>
               </div>
-              <div style={styles.headerStatusChip}>
-                <span style={styles.headerStatusDot} />
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-[10px] font-bold text-slate-300 uppercase tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
                 Gemini 2.5 Flash
               </div>
             </header>
 
             {/* ── Language Selector Bar ── */}
-            <div style={styles.langBar} className="lang-bar">
-              <span style={styles.langBarIcon}>🌐</span>
-              <span style={styles.langBarLabel}>{t.respondIn}</span>
-              <div style={styles.langBarOptions}>
+            <div className="flex items-center gap-3 py-3 border-b border-slate-700/50 overflow-x-auto">
+              <span className="text-slate-400">🌐</span>
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">{t.respondIn}</span>
+              <div className="flex bg-slate-900/50 p-1 rounded-lg border border-slate-700/50 shadow-inner">
                 {SUPPORTED_LANGUAGES.map((lang) => (
                   <button
                     key={lang.code}
                     id={`lang-btn-${lang.code}`}
-                    className="lang-pill"
+                    className={`lang-pill px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap ${selectedLangCode === lang.code ? 'bg-sky-500 text-white shadow-md' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
                     onClick={() => setSelectedLangCode(lang.code)}
                     disabled={isLoading}
                     aria-disabled={isLoading}
-                    style={{
-                      ...styles.langPill,
-                      ...(selectedLangCode === lang.code ? styles.langPillActive : {}),
-                    }}
                   >
                     {lang.nativeName}
                   </button>
@@ -746,77 +735,63 @@ function App() {
             </div>
 
             {/* ── Jargon Smashing Mode Toggle ── */}
-            <div style={styles.jargonBar} className="jargon-bar">
-              <div style={styles.jargonLeft}>
-                <span style={styles.jargonIcon}>⚡</span>
+            <div className="flex items-center justify-between py-4 border-b border-slate-700/50">
+              <div className="flex gap-3">
+                <span className="text-xl text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">⚡</span>
                 <div>
-                  <span style={styles.jargonLabel}>{t.jargonToggle}</span>
-                  <p style={styles.jargonDesc}>{t.jargonDesc}</p>
+                  <span className="text-sm font-bold text-slate-200">{t.jargonToggle}</span>
+                  <p className="text-xs text-slate-400 max-w-sm leading-relaxed mt-0.5">{t.jargonDesc}</p>
                 </div>
               </div>
               <button
                 id="jargon-toggle-btn"
-                className="interactive-btn"
+                className={`interactive-btn relative w-12 h-6 rounded-full transition-colors duration-300 ${jargonMode ? 'bg-sky-500 shadow-[0_0_12px_rgba(14,165,233,0.4)]' : 'bg-slate-700'}`}
                 onClick={() => setJargonMode((v) => !v)}
-                style={{
-                  ...styles.toggleBtn,
-                  ...(jargonMode ? styles.toggleBtnOn : {}),
-                }}
                 aria-pressed={jargonMode}
               >
-                <span style={{
-                  ...styles.toggleKnob,
-                  ...(jargonMode ? styles.toggleKnobOn : {}),
-                }} />
+                <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 shadow-sm ${jargonMode ? 'transform translate-x-6' : ''}`} />
               </button>
             </div>
 
             {/* ── Network Error Banner (isolated from AI history) ── */}
             {chatNetworkError && (
-              <div style={styles.errorBanner}>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-red-900/20 border border-red-500/30 text-red-400 text-sm font-medium my-2 animate-slide-down">
                 <span>{chatNetworkError}</span>
                 <button
-                  style={styles.errorDismiss}
+                  className="text-red-400 hover:text-red-300"
                   onClick={() => setChatNetworkError(null)}
                   aria-label="Dismiss error"
                 >✕</button>
               </div>
             )}
 
-            <div style={styles.messagesContainer} className="messages-container" id="chat-messages">
+            <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-6 scroll-smooth" id="chat-messages">
               {renderedMessages.map((msg, index) => (
                 <div
                   key={index}
-                  style={{
-                    ...styles.messageBubbleRow,
-                    justifyContent:
-                      msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  }}
+                  className={`flex items-end gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {msg.role === 'ai' && (
-                    <div style={styles.bubbleAvatar}>🤖</div>
+                    <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-sm shadow-md flex-shrink-0">🤖</div>
                   )}
                   <div
-                    style={{
-                      ...styles.messageBubble,
-                      ...(msg.role === 'user'
-                        ? styles.userBubble
-                        : styles.aiBubble),
-                    }}
+                    className={`max-w-[85%] px-5 py-3.5 shadow-lg ${msg.role === 'user'
+                        ? 'bg-sky-600 text-white rounded-t-2xl rounded-bl-2xl rounded-br-sm'
+                        : 'bg-slate-800/80 backdrop-blur-md text-slate-200 border border-slate-700/50 rounded-t-2xl rounded-br-2xl rounded-bl-sm leading-relaxed'
+                      }`}
                   >
-                    <p style={styles.bubbleText}>{msg.rendered}</p>
+                    <p className="text-sm whitespace-pre-wrap break-words">{msg.rendered}</p>
                   </div>
                   {msg.role === 'user' && (
-                    <div style={styles.bubbleAvatarUser}>👤</div>
+                    <div className="w-8 h-8 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-sm shadow-md flex-shrink-0">👤</div>
                   )}
                 </div>
               ))}
               {isLoading && (
-                <div style={styles.messageBubbleRow}>
-                  <div style={styles.bubbleAvatar}>🤖</div>
-                  {/* Typing bubble matches messageBubble spatial params for zero CLS */}
-                  <div style={{ ...styles.messageBubble, ...styles.aiBubble, ...styles.typingBubble }}>
-                    <div style={styles.typingIndicator}>
+                <div className="flex items-end gap-3 justify-start">
+                  <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-sm shadow-md flex-shrink-0">🤖</div>
+                  <div className="max-w-[85%] px-5 py-4 shadow-lg bg-slate-800/80 backdrop-blur-md text-slate-200 border border-slate-700/50 rounded-t-2xl rounded-br-2xl rounded-bl-sm">
+                    <div className="flex items-center gap-1.5 h-full">
                       <span className="premium-typing-dot" style={{ animationDelay: '0s' }} />
                       <span className="premium-typing-dot" style={{ animationDelay: '0.2s' }} />
                       <span className="premium-typing-dot" style={{ animationDelay: '0.4s' }} />
@@ -827,7 +802,7 @@ function App() {
               <div ref={chatEndRef} />
             </div>
 
-            <div style={styles.chatInputBar} className="chat-input-bar">
+            <div className="mt-4 bg-slate-800/50 backdrop-blur-xl border border-slate-700 p-2 rounded-2xl flex items-center shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
               <input
                 id="chat-input"
                 ref={inputRef}
@@ -836,24 +811,18 @@ function App() {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                style={styles.chatInput}
+                className="flex-1 bg-transparent border-none text-slate-100 text-sm px-4 py-2 outline-none placeholder:text-slate-500"
                 disabled={isLoading}
                 maxLength={600}
               />
               <button
                 id="send-button"
-                className="interactive-btn"
+                className={`interactive-btn ml-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 ${isLoading || !userInput.trim() ? 'bg-slate-700 text-slate-400 opacity-50 cursor-not-allowed' : 'bg-sky-500 text-white hover:bg-sky-400 shadow-[0_0_15px_rgba(14,165,233,0.4)]'}`}
                 onClick={handleSendMessage}
                 disabled={isLoading || !userInput.trim()}
-                style={{
-                  ...styles.sendBtn,
-                  ...(isLoading || !userInput.trim()
-                    ? styles.sendBtnDisabled
-                    : {}),
-                }}
               >
                 {isLoading ? (
-                  <><span className="glowing-spinner" style={{marginRight: 0}} /></>
+                  <><span className="glowing-spinner !mr-0" /></>
                 ) : (
                   <span>{t.sendBtn} ➤</span>
                 )}
@@ -864,45 +833,45 @@ function App() {
 
         {/* ══════════════ REPORT ISSUES TAB ══════════════ */}
         {activeTab === 'report' && (
-          <div style={styles.reportContainer} className="report-container">
+          <div className="flex-1 flex flex-col overflow-y-auto p-6 md:p-8 gap-6">
             {/* ─ Page Header ─ */}
-            <div style={styles.reportPageHeader}>
-              <div style={styles.reportHeaderIcon}>📋</div>
+            <div className="flex items-center gap-4 pb-5 border-b border-slate-700/50">
+              <div className="w-[52px] h-[52px] rounded-2xl bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-2xl flex-shrink-0 shadow-[0_0_15px_rgba(14,165,233,0.15)]">📋</div>
               <div>
-                <h2 style={styles.reportPageTitle}>{t.reportTitle}</h2>
-                <p style={styles.reportPageSub}>{t.reportSub}</p>
+                <h2 className="text-[22px] font-bold text-slate-100 tracking-tight">{t.reportTitle}</h2>
+                <p className="text-[13px] text-slate-400 mt-1">{t.reportSub}</p>
               </div>
             </div>
 
             {/* ─ Success Banner ─ */}
             {submitSuccess && (
-              <div style={styles.successBanner}>
+               <div className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium animate-slide-down shadow-[0_4px_12px_rgba(16,185,129,0.1)]">
                 <span>✅</span>
                 <span>{t.successMsg}</span>
               </div>
             )}
 
-            <div style={styles.reportLayout} className="report-layout">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-6 flex-1 min-h-0">
               {/* ─────── FORM PANEL ─────── */}
-              <div style={styles.formPanel}>
-                <h3 style={styles.panelTitle}>
+              <div className="bg-slate-900/40 border border-slate-700/50 rounded-2xl p-6 flex flex-col gap-5 backdrop-blur-xl shadow-lg">
+                <h3 className="flex items-center gap-2.5 text-[15px] font-bold text-sky-400 tracking-tight">
                   <span>🗂️</span> {t.newComplaint}
                 </h3>
                 <form
                   id="report-form"
                   onSubmit={handleSubmitReport}
-                  style={styles.form}
+                  className="flex flex-col gap-5"
                 >
                   {/* Category */}
-                  <div style={styles.formGroup}>
-                    <label htmlFor="issue-category" style={styles.formLabel}>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="issue-category" className="text-xs font-bold text-slate-300 uppercase tracking-wide">
                       {t.issueCategory}
                     </label>
                     <select
                       id="issue-category"
                       value={reportCategory}
                       onChange={(e) => setReportCategory(e.target.value)}
-                      style={styles.formSelect}
+                      className="px-4 py-3 rounded-xl border border-slate-700 bg-slate-800/80 text-slate-200 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all cursor-pointer shadow-inner"
                       required
                     >
                       {ISSUE_CATEGORIES.map((cat) => (
@@ -914,10 +883,10 @@ function App() {
                   </div>
 
                   {/* Location Description */}
-                  <div style={styles.formGroup}>
+                  <div className="flex flex-col gap-2">
                     <label
                       htmlFor="location-description"
-                      style={styles.formLabel}
+                      className="text-xs font-bold text-slate-300 uppercase tracking-wide"
                     >
                       {t.locationDesc}
                     </label>
@@ -926,7 +895,7 @@ function App() {
                       placeholder={t.locationPlaceholder}
                       value={reportLocation}
                       onChange={(e) => setReportLocation(e.target.value)}
-                      style={styles.formTextarea}
+                      className="px-4 py-3 rounded-xl border border-slate-700 bg-slate-800/80 text-slate-200 text-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all resize-y min-h-[80px] leading-relaxed shadow-inner placeholder:text-slate-500"
                       rows={3}
                       required
                       maxLength={400}
@@ -934,31 +903,22 @@ function App() {
                   </div>
 
                   {/* Geolocation */}
-                  <div style={styles.formGroup}>
-                    <label style={styles.formLabel}>{t.gpsCoords}</label>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-slate-300 uppercase tracking-wide">{t.gpsCoords}</label>
                     <button
                       id="get-location-btn"
-                      className="interactive-btn"
+                      className={`interactive-btn text-left px-4 py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 ${geoStatus === 'captured' ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-400' : geoStatus === 'error' || geoStatus === 'denied' ? 'border border-red-500/40 bg-red-500/10 text-red-400' : 'border border-dashed border-sky-500/40 bg-sky-500/10 text-sky-400 hover:bg-sky-500/20'}`}
                       type="button"
                       onClick={handleGetLocation}
                       disabled={geoStatus === 'loading'}
-                      style={{
-                        ...styles.geoBtn,
-                        ...(geoStatus === 'captured'
-                          ? styles.geoBtnCaptured
-                          : {}),
-                        ...(geoStatus === 'error' || geoStatus === 'denied'
-                          ? styles.geoBtnError
-                          : {}),
-                      }}
                     >
                       {geoButtonLabel()}
                     </button>
                     {geoStatus === 'captured' && (
-                      <p style={styles.geoNote}>{t.coordsNote}</p>
+                      <p className="text-[11px] text-emerald-400 mt-1">{t.coordsNote}</p>
                     )}
                     {geoStatus === 'denied' && (
-                      <p style={styles.geoDeniedNote}>
+                      <p className="text-[11px] text-amber-400 mt-1 leading-relaxed">
                         💡 {t.locationGuide}
                       </p>
                     )}
@@ -967,15 +927,9 @@ function App() {
                   {/* Submit */}
                   <button
                     id="submit-ticket-btn"
-                    className="interactive-btn"
+                    className={`interactive-btn flex items-center justify-center gap-2 mt-1 px-7 py-3.5 rounded-xl font-bold text-[15px] transition-all duration-300 shadow-[0_6px_20px_rgba(14,165,233,0.3)] ${isSubmitting || !reportLocation.trim() ? 'opacity-50 cursor-not-allowed bg-slate-700 text-slate-400 shadow-none' : 'bg-sky-500 text-white hover:bg-sky-400'}`}
                     type="submit"
                     disabled={isSubmitting || !reportLocation.trim()}
-                    style={{
-                      ...styles.submitBtn,
-                      ...(isSubmitting || !reportLocation.trim()
-                        ? styles.submitBtnDisabled
-                        : {}),
-                    }}
                   >
                     {isSubmitting ? (
                       <>
@@ -989,77 +943,72 @@ function App() {
               </div>
 
               {/* ─────── TICKETS DASHBOARD ─────── */}
-              <div style={styles.dashboardPanel}>
-                <div style={styles.dashboardHeader}>
-                  <h3 style={styles.panelTitle}>
+              <div className="bg-slate-900/40 border border-slate-700/50 rounded-2xl p-6 flex flex-col gap-4 backdrop-blur-xl shadow-lg min-h-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="flex items-center gap-2.5 text-[15px] font-bold text-sky-400 tracking-tight">
                     <span>📡</span> {t.activeComplaints}
                   </h3>
                   <button
                     id="refresh-tickets-btn"
-                    className="interactive-btn"
+                    className={`interactive-btn px-2.5 py-1.5 rounded-lg border border-slate-700 bg-transparent text-slate-300 text-sm transition-all hover:bg-slate-800 ${ticketsLoading ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''}`}
                     type="button"
                     onClick={fetchTickets}
                     disabled={ticketsLoading}
-                    style={{
-                      ...styles.refreshBtn,
-                      ...(ticketsLoading ? styles.refreshBtnDisabled : {}),
-                    }}
                     title="Refresh list"
                   >
                     🔄
                   </button>
                 </div>
 
-                <div style={styles.ticketsList} id="tickets-list">
+                <div className="flex-1 overflow-y-auto flex flex-col gap-3 pr-1" id="tickets-list">
                   {ticketsLoading ? (
-                    <div style={styles.ticketsLoadingState}>
-                      {/* Shimmer skeletons match real ticket card height — CLS = 0 */}
+                    <div className="flex flex-col gap-0 p-0">
                       <div className="shimmer-loader" />
-                      <div className="shimmer-loader" style={{ width: '80%' }} />
-                      <div className="shimmer-loader" style={{ width: '60%' }} />
-                      <p style={styles.loadingText}>{t.fetchingComplaints}</p>
+                      <div className="shimmer-loader w-[80%]" />
+                      <div className="shimmer-loader w-[60%]" />
+                      <p className="text-[13px] text-slate-400 text-center mt-2">{t.fetchingComplaints}</p>
                     </div>
                   ) : ticketsFetchError ? (
-                    <div style={styles.inlineErrorBanner}>
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-red-900/20 border border-red-500/30 text-red-400 text-sm font-medium">
                       <span>{ticketsFetchError}</span>
                       <button
-                        style={styles.errorDismiss}
+                        className="text-red-400 hover:text-red-300"
                         onClick={() => setTicketsFetchError(null)}
                         aria-label="Dismiss fetch error"
                       >✕</button>
                     </div>
                   ) : tickets.length === 0 ? (
-                    <div style={styles.emptyState}>
-                      <span style={styles.emptyIcon}>📭</span>
-                      <p style={styles.emptyText}>{t.noComplaints}</p>
-                      <p style={styles.emptySubText}>{t.beFirst}</p>
+                    <div className="flex flex-col items-center justify-center gap-2.5 py-12">
+                      <span className="text-4xl opacity-50">📭</span>
+                      <p className="text-[15px] font-semibold text-slate-300">{t.noComplaints}</p>
+                      <p className="text-[13px] text-slate-500">{t.beFirst}</p>
                     </div>
                   ) : (
                     tickets.map((ticket) => (
-                      <div key={ticket.id} style={styles.ticketCard}>
-                        <div style={styles.ticketCardTop}>
-                          <div style={styles.ticketCategory}>
-                            <span style={styles.categoryEmoji}>
+                      <div key={ticket.id} className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 flex flex-col gap-2 transition-colors hover:border-slate-600 animate-float-in min-h-[88px] shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">
                               {CATEGORY_ICONS[ticket.category] || '📌'}
                             </span>
-                            <span style={styles.categoryName}>
+                            <span className="text-sm font-bold text-sky-400">
                               {ticket.category}
                             </span>
                           </div>
-                          <span style={styles.statusBadge}>
+                          <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 rounded-full px-2.5 py-0.5 tracking-wide">
                             ● {ticket.status || 'Open'}
                           </span>
                         </div>
-                        <p style={styles.ticketLocation}>
+                        <p className="text-[13px] text-slate-400 leading-relaxed">
                           📍 {ticket.locationDescription}
                         </p>
                         {ticket.coordinates && (
-                          <p style={styles.ticketCoords}>
+                          <p className="text-[11px] text-slate-300 font-mono">
                             🌐 {ticket.coordinates.lat?.toFixed(4)},{' '}
                             {ticket.coordinates.lng?.toFixed(4)}
                           </p>
                         )}
-                        <p style={styles.ticketTime}>
+                        <p className="text-[11px] text-slate-300">
                           🕐 {formatTimestamp(ticket.createdAt)}
                         </p>
                       </div>
@@ -1074,742 +1023,5 @@ function App() {
     </div>
   );
 }
-
-// ═══════════════════════════════════════════════════
-// STYLES
-// ═══════════════════════════════════════════════════
-
-const styles = {
-  // ─── App Shell ───
-  appShell: {
-    display: 'flex',
-    height: '100vh',
-    background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1040 50%, #0f172a 100%)',
-    fontFamily: "'Inter', sans-serif",
-  },
-
-  // ─── Sidebar ───
-  sidebar: {
-    width: '260px',
-    minWidth: '260px',
-    background: 'rgba(15, 10, 40, 0.85)',
-    backdropFilter: 'blur(20px)',
-    borderRight: '1px solid rgba(139, 92, 246, 0.15)',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '24px 16px',
-  },
-  brandSection: {
-    textAlign: 'center',
-    marginBottom: '32px',
-    paddingBottom: '24px',
-    borderBottom: '1px solid rgba(139, 92, 246, 0.12)',
-  },
-  // fontSize uses rem for system-scale compliance
-  logoIcon: { fontSize: '2.25rem', marginBottom: '0.5rem' },
-  brandTitle: {
-    fontSize: '1.375rem',   // 22px → rem
-    fontWeight: '700',
-    background: 'linear-gradient(135deg, #a78bfa, #7c3aed, #6d28d9)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    letterSpacing: '-0.5px',
-  },
-  brandSub: {
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1 on #0f0a28 dark glass
-    marginTop: '4px',
-    letterSpacing: '1.5px',
-    textTransform: 'uppercase',
-  },
-  nav: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    flex: 1,
-  },
-  navBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '12px 16px',
-    border: 'none',
-    borderRadius: '12px',
-    background: 'transparent',
-    color: '#a0a0c0',
-    fontSize: '0.875rem',   // 14px → rem
-    fontWeight: '500',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    textAlign: 'left',
-    fontFamily: "'Inter', sans-serif",
-    position: 'relative',
-  },
-  navBtnActive: {
-    background:
-      'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.15))',
-    color: '#c4b5fd',
-    boxShadow: 'inset 0 0 0 1px rgba(139, 92, 246, 0.3)',
-  },
-  navIcon: { fontSize: '1.125rem' },
-  ticketBadge: {
-    marginLeft: 'auto',
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    color: '#fff',
-    borderRadius: '20px',
-    padding: '1px 8px',
-    fontSize: '0.6875rem',  // 11px → rem
-    fontWeight: '700',
-  },
-  sidebarFooter: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    paddingTop: '16px',
-    borderTop: '1px solid rgba(139, 92, 246, 0.1)',
-  },
-  footerDot: {
-    width: '6px',
-    height: '6px',
-    borderRadius: '50%',
-    background: '#22c55e',
-    boxShadow: '0 0 8px rgba(34, 197, 94, 0.5)',
-  },
-
-  // ─── Main Content ───
-  mainContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-
-  // ─── Chat ───
-  chatContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  chatHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '16px 28px',
-    background: 'rgba(15, 10, 40, 0.6)',
-    backdropFilter: 'blur(16px)',
-    borderBottom: '1px solid rgba(139, 92, 246, 0.1)',
-    flexShrink: 0,
-  },
-  chatHeaderLeft: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '14px',
-  },
-  headerStatusChip: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '7px',
-    padding: '6px 14px',
-    borderRadius: '20px',
-    background: 'rgba(139, 92, 246, 0.1)',
-    border: '1px solid rgba(139, 92, 246, 0.25)',
-    fontSize: '0.75rem',    // 12px → rem
-    fontWeight: '600',
-    color: '#a78bfa',
-    letterSpacing: '0.2px',
-  },
-  headerStatusDot: {
-    width: '7px',
-    height: '7px',
-    borderRadius: '50%',
-    background: '#22c55e',
-    boxShadow: '0 0 7px rgba(34, 197, 94, 0.6)',
-    flexShrink: 0,
-  },
-  aiAvatar: {
-    width: '44px',
-    height: '44px',
-    borderRadius: '14px',
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.375rem',   // 22px → rem
-    boxShadow: '0 4px 15px rgba(124, 58, 237, 0.35)',
-    flexShrink: 0,
-  },
-  chatTitle: {
-    fontSize: '1.0625rem',  // 17px → rem
-    fontWeight: '700',
-    color: '#f1f5f9',
-    letterSpacing: '-0.3px',
-  },
-  chatSubtitle: {
-    fontSize: '0.75rem',    // 12px → rem
-    color: '#22c55e',
-    marginTop: '2px',
-    fontWeight: '500',
-  },
-
-  // ── Language Bar ──
-  langBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '10px 28px',
-    background: 'rgba(10, 7, 30, 0.45)',
-    backdropFilter: 'blur(12px)',
-    borderBottom: '1px solid rgba(139, 92, 246, 0.08)',
-    flexShrink: 0,
-    flexWrap: 'wrap',
-  },
-  langBarIcon: { fontSize: '1rem', flexShrink: 0 },
-  langBarLabel: {
-    fontSize: '0.75rem',    // 12px → rem
-    fontWeight: '600',
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    letterSpacing: '0.5px',
-    textTransform: 'uppercase',
-    flexShrink: 0,
-  },
-  langBarOptions: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
-  langPill: {
-    padding: '5px 14px',
-    borderRadius: '20px',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    background: 'transparent',
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    fontSize: '0.75rem',    // 12px → rem
-    fontWeight: '500',
-    cursor: 'pointer',
-    fontFamily: "'Inter', sans-serif",
-    transition: 'all 0.18s ease',
-    whiteSpace: 'nowrap',
-  },
-  langPillActive: {
-    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(109, 40, 217, 0.2))',
-    border: '1px solid rgba(139, 92, 246, 0.5)',
-    color: '#c4b5fd',
-    boxShadow: '0 0 12px rgba(139, 92, 246, 0.2)',
-  },
-
-  // ── Jargon Smashing Mode bar ──
-  jargonBar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '12px',
-    padding: '10px 28px',
-    background: 'rgba(139, 92, 246, 0.04)',
-    borderBottom: '1px solid rgba(139, 92, 246, 0.08)',
-    flexShrink: 0,
-  },
-  jargonLeft: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '10px',
-  },
-  jargonIcon: { fontSize: '1rem', marginTop: '1px' },
-  jargonLabel: {
-    fontSize: '0.8125rem',  // 13px → rem
-    fontWeight: '700',
-    color: '#c4b5fd',
-    display: 'block',
-  },
-  jargonDesc: {
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1 on dark panel background
-    marginTop: '2px',
-    lineHeight: 1.4,
-    maxWidth: '520px',
-  },
-  toggleBtn: {
-    position: 'relative',
-    width: '42px',
-    height: '24px',
-    borderRadius: '12px',
-    border: '1px solid rgba(139, 92, 246, 0.3)',
-    background: 'rgba(30, 27, 75, 0.6)',
-    cursor: 'pointer',
-    padding: 0,
-    flexShrink: 0,
-    transition: 'all 0.25s ease',
-  },
-  toggleBtnOn: {
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    border: '1px solid #7c3aed',
-    boxShadow: '0 0 12px rgba(124, 58, 237, 0.4)',
-  },
-  toggleKnob: {
-    position: 'absolute',
-    top: '3px',
-    left: '3px',
-    width: '16px',
-    height: '16px',
-    borderRadius: '50%',
-    background: '#cbd5e1', // WCAG AA compliant on dark panel bg
-    transition: 'all 0.25s ease',
-  },
-  toggleKnobOn: {
-    left: '21px',
-    background: '#ffffff',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
-  },
-
-  // ── Error Banner (network errors — isolated from AI history) ──
-  errorBanner: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '12px',
-    padding: '12px 20px',
-    background: 'rgba(239, 68, 68, 0.1)',
-    border: '1px solid rgba(239, 68, 68, 0.3)',
-    borderLeft: '3px solid #ef4444',
-    color: '#fca5a5',
-    fontSize: '0.8125rem',  // 13px → rem
-    flexShrink: 0,
-    animation: 'slide-down 0.3s ease-out',
-  },
-  // Inline error inside the tickets list
-  inlineErrorBanner: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '12px',
-    padding: '14px 16px',
-    borderRadius: '12px',
-    background: 'rgba(239, 68, 68, 0.08)',
-    border: '1px solid rgba(239, 68, 68, 0.25)',
-    borderLeft: '3px solid #ef4444',
-    color: '#fca5a5',
-    fontSize: '0.8125rem',  // 13px → rem
-    animation: 'slide-down 0.3s ease-out',
-  },
-  errorDismiss: {
-    background: 'transparent',
-    border: 'none',
-    color: '#f87171',
-    cursor: 'pointer',
-    fontSize: '0.875rem',   // 14px → rem
-    padding: '2px 6px',
-    borderRadius: '4px',
-    flexShrink: 0,
-    fontFamily: "'Inter', sans-serif",
-  },
-
-  // ── Messages ──
-  messagesContainer: {
-    flex: 1,
-    overflowY: 'auto',
-    padding: '24px 28px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  messageBubbleRow: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    gap: '10px',
-    animation: 'float-in 0.3s ease-out',
-  },
-  bubbleAvatar: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '10px',
-    background: 'linear-gradient(135deg, #7c3aed, #4c1d95)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1rem',
-    flexShrink: 0,
-  },
-  bubbleAvatarUser: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '10px',
-    background: 'linear-gradient(135deg, #0ea5e9, #0369a1)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1rem',
-    flexShrink: 0,
-  },
-  messageBubble: {
-    maxWidth: '70%',
-    padding: '14px 18px',
-    borderRadius: '18px',
-    lineHeight: '1.6',
-    // Explicit min-height aligns typing bubble spatially with real text cards
-    minHeight: '48px',
-  },
-  aiBubble: {
-    background: 'rgba(30, 27, 75, 0.6)',
-    border: '1px solid rgba(139, 92, 246, 0.15)',
-    borderBottomLeftRadius: '4px',
-    color: '#e2e8f0',
-  },
-  userBubble: {
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    borderBottomRightRadius: '4px',
-    color: '#ffffff',
-    boxShadow: '0 4px 15px rgba(124, 58, 237, 0.3)',
-  },
-  // Typing bubble matches messageBubble size to prevent CLS
-  typingBubble: {
-    display: 'flex',
-    alignItems: 'center',
-    minHeight: '48px',
-  },
-  bubbleText: {
-    fontSize: '0.875rem',   // 14px → rem
-    margin: 0,
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-  },
-  typingIndicator: {
-    display: 'flex',
-    gap: '6px',
-    padding: '4px 0',
-    alignItems: 'center',
-  },
-  chatInputBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '16px 28px 20px',
-    background: 'rgba(15, 10, 40, 0.6)',
-    backdropFilter: 'blur(16px)',
-    borderTop: '1px solid rgba(139, 92, 246, 0.1)',
-  },
-  chatInput: {
-    flex: 1,
-    padding: '14px 20px',
-    borderRadius: '14px',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    background: 'rgba(30, 27, 75, 0.5)',
-    color: '#e2e8f0',
-    fontSize: '0.875rem',   // 14px → rem
-    fontFamily: "'Inter', sans-serif",
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-  },
-  sendBtn: {
-    padding: '14px 24px',
-    borderRadius: '14px',
-    border: 'none',
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    color: '#ffffff',
-    fontSize: '0.875rem',   // 14px → rem
-    fontWeight: '600',
-    cursor: 'pointer',
-    fontFamily: "'Inter', sans-serif",
-    transition: 'all 0.2s ease',
-    boxShadow: '0 4px 15px rgba(124, 58, 237, 0.35)',
-    whiteSpace: 'nowrap',
-  },
-  sendBtnDisabled: {
-    opacity: 0.5,
-    cursor: 'not-allowed',
-    boxShadow: 'none',
-  },
-
-  // ─── Report Issues ───
-  reportContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflowY: 'auto',
-    padding: '28px 32px',
-    gap: '24px',
-  },
-  reportPageHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '16px',
-    paddingBottom: '20px',
-    borderBottom: '1px solid rgba(139, 92, 246, 0.12)',
-  },
-  reportHeaderIcon: {
-    width: '52px',
-    height: '52px',
-    borderRadius: '16px',
-    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(109, 40, 217, 0.2))',
-    border: '1px solid rgba(139, 92, 246, 0.3)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.625rem',   // 26px → rem
-    flexShrink: 0,
-  },
-  reportPageTitle: {
-    fontSize: '1.375rem',   // 22px → rem
-    fontWeight: '700',
-    color: '#f1f5f9',
-    letterSpacing: '-0.4px',
-  },
-  reportPageSub: {
-    fontSize: '0.8125rem',  // 13px → rem
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    marginTop: '4px',
-  },
-  successBanner: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '14px 20px',
-    borderRadius: '14px',
-    background: 'rgba(34, 197, 94, 0.12)',
-    border: '1px solid rgba(34, 197, 94, 0.3)',
-    color: '#4ade80',
-    fontSize: '0.875rem',   // 14px → rem
-    fontWeight: '500',
-    animation: 'slide-down 0.3s ease-out',
-  },
-  reportLayout: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1.2fr',
-    gap: '24px',
-    flex: 1,
-    minHeight: 0,
-  },
-  formPanel: {
-    background: 'rgba(15, 10, 40, 0.5)',
-    border: '1px solid rgba(139, 92, 246, 0.12)',
-    borderRadius: '20px',
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    backdropFilter: 'blur(12px)',
-  },
-  panelTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    fontSize: '0.9375rem',  // 15px → rem
-    fontWeight: '700',
-    color: '#c4b5fd',
-    letterSpacing: '-0.2px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-  },
-  formLabel: {
-    fontSize: '0.75rem',    // 12px → rem
-    fontWeight: '600',
-    color: '#e2e8f0',       // WCAG AA ≥ 4.5:1
-    textTransform: 'uppercase',
-    letterSpacing: '0.8px',
-  },
-  formSelect: {
-    padding: '12px 16px',
-    borderRadius: '12px',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    background: 'rgba(30, 27, 75, 0.6)',
-    color: '#e2e8f0',
-    fontSize: '0.875rem',   // 14px → rem
-    fontFamily: "'Inter', sans-serif",
-    cursor: 'pointer',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-  },
-  formTextarea: {
-    padding: '12px 16px',
-    borderRadius: '12px',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    background: 'rgba(30, 27, 75, 0.6)',
-    color: '#e2e8f0',
-    fontSize: '0.875rem',   // 14px → rem
-    fontFamily: "'Inter', sans-serif",
-    resize: 'vertical',
-    minHeight: '80px',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-    lineHeight: 1.6,
-  },
-  geoBtn: {
-    padding: '12px 18px',
-    borderRadius: '12px',
-    border: '1px dashed rgba(139, 92, 246, 0.4)',
-    background: 'rgba(30, 27, 75, 0.4)',
-    color: '#a78bfa',
-    fontSize: '0.8125rem',  // 13px → rem
-    fontWeight: '600',
-    cursor: 'pointer',
-    fontFamily: "'Inter', sans-serif",
-    transition: 'all 0.25s ease',
-    textAlign: 'left',
-  },
-  geoBtnCaptured: {
-    border: '1px solid rgba(34, 197, 94, 0.4)',
-    background: 'rgba(34, 197, 94, 0.08)',
-    color: '#4ade80',
-  },
-  geoBtnError: {
-    border: '1px solid rgba(239, 68, 68, 0.4)',
-    background: 'rgba(239, 68, 68, 0.08)',
-    color: '#f87171',
-  },
-  geoNote: {
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#4ade80',
-    marginTop: '4px',
-  },
-  geoDeniedNote: {
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#fbbf24',
-    marginTop: '4px',
-    lineHeight: 1.5,
-  },
-  submitBtn: {
-    padding: '14px 28px',
-    borderRadius: '14px',
-    border: 'none',
-    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-    color: '#ffffff',
-    fontSize: '0.9375rem',  // 15px → rem
-    fontWeight: '700',
-    cursor: 'pointer',
-    fontFamily: "'Inter', sans-serif",
-    transition: 'all 0.25s ease',
-    boxShadow: '0 6px 20px rgba(124, 58, 237, 0.4)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    marginTop: '4px',
-  },
-  submitBtnDisabled: {
-    opacity: 0.45,
-    cursor: 'not-allowed',
-    boxShadow: 'none',
-  },
-
-  // ─ Dashboard Panel ─
-  dashboardPanel: {
-    background: 'rgba(15, 10, 40, 0.5)',
-    border: '1px solid rgba(139, 92, 246, 0.12)',
-    borderRadius: '20px',
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    backdropFilter: 'blur(12px)',
-    minHeight: 0,
-  },
-  dashboardHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  refreshBtn: {
-    padding: '6px 10px',
-    borderRadius: '8px',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    background: 'transparent',
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    fontSize: '0.875rem',   // 14px → rem
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    fontFamily: "'Inter', sans-serif",
-  },
-  refreshBtnDisabled: {
-    opacity: 0.4,
-    cursor: 'not-allowed',
-    pointerEvents: 'none',
-  },
-  ticketsList: {
-    flex: 1,
-    overflowY: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    paddingRight: '4px',
-  },
-  ticketsLoadingState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    gap: '0',
-    padding: '0',
-  },
-  loadingText: { fontSize: '0.8125rem', color: '#cbd5e1', textAlign: 'center', marginTop: '8px' }, // WCAG AA
-  emptyState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-    padding: '48px 0',
-  },
-  emptyIcon: { fontSize: '2.5rem', opacity: 0.5 },
-  emptyText: {
-    fontSize: '0.9375rem',  // 15px → rem
-    fontWeight: '600',
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-  },
-  emptySubText: { fontSize: '0.8125rem', color: '#3d3d5a' },
-  ticketCard: {
-    padding: '16px',
-    borderRadius: '14px',
-    background: 'rgba(30, 27, 75, 0.4)',
-    border: '1px solid rgba(139, 92, 246, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    transition: 'border-color 0.2s',
-    animation: 'float-in 0.3s ease-out',
-    // Explicit min-height keeps skeleton and real card heights in sync → CLS = 0
-    minHeight: '88px',
-  },
-  ticketCardTop: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  ticketCategory: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  categoryEmoji: { fontSize: '1.125rem' },
-  categoryName: {
-    fontSize: '0.875rem',   // 14px → rem
-    fontWeight: '700',
-    color: '#c4b5fd',
-  },
-  statusBadge: {
-    fontSize: '0.6875rem',  // 11px → rem
-    fontWeight: '700',
-    color: '#4ade80',
-    background: 'rgba(34, 197, 94, 0.1)',
-    border: '1px solid rgba(34, 197, 94, 0.25)',
-    borderRadius: '20px',
-    padding: '3px 10px',
-    letterSpacing: '0.3px',
-  },
-  ticketLocation: {
-    fontSize: '0.8125rem',  // 13px → rem
-    color: '#a0a0c0',
-    lineHeight: 1.5,
-  },
-  ticketCoords: {
-    fontSize: '0.6875rem',  // 11px → rem
-    color: '#cbd5e1',       // WCAG AA ≥ 4.5:1
-    fontFamily: 'monospace',
-  },
-  ticketTime: { fontSize: '0.6875rem', color: '#cbd5e1' }, // WCAG AA
-};
 
 export default App;
